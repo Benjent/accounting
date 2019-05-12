@@ -1,13 +1,57 @@
-@import url('https://fonts.googleapis.com/css?family=Anton|PT+Sans+Narrow');
+@import '_gatherer.scss';
 
-$primary: #EDA263;
-$danger: #FF0000;
-$white: #FFFFFF;
-$f_title: 'Anton', sans-serif;
-$f_text: 'PT Sans Narrow', sans-serif;
+// ***** ELEMENT ***** //@at-root
+.type {
+	text-transform: lowercase;
+}
+.value {
+	color: $white;
+	font-weight: bold;
+}
+
+// ***** LAYOUT ***** //
+
+#app {
+	font-family: $f_text;
+	display: flex;
+	height: 100%;
+	color: $grey-dark;
+	background: $white;
+}
+
+#table {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	padding: 20px;
+	.column {
+		margin-left: 20px;
+		&:first-of-type {
+				margin-left: 0;
+		}
+	}
+	.month {
+		border-bottom: solid 2px;
+	}
+	.spendings {
+		max-height: 500px;
+		overflow-y: auto;
+	}
+}
+
+#stats {
+	padding: 20px;
+	background: $secondary;
+	color: $grey-light;
+
+	.value {
+		color: $white;
+	}
+}
 
 .budgetExceeded {
 	color: $danger;
+	font-weight: bold;
 }
 
 .spendingsPerMonth {
@@ -16,26 +60,6 @@ $f_text: 'PT Sans Narrow', sans-serif;
 
 .spendingsPerMonthPerType {
 	margin-top: 20px;
-}
-
-body {
-    color: $white;
-		background: $primary;
-		font-family: $f_text;
-}
-
-#table {
-		width: 100%;
-    display: flex;
-		justify-content: space-between;
-
-    .month {
-        margin-left: 20px;
-
-        &:first-of-type {
-            margin-left: 0;
-        }
-    }
 }
 
 label {

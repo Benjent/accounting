@@ -1,32 +1,54 @@
 <template>
-  <div>
+  <div id="app">
     <div id="table">
-      <div class="month" v-for="(month, index) in MONTHS" :key="month">
-        <h2>{{ month }}</h2>
+      <div class="column" v-for="(month, index) in MONTHS" :key="month">
+
+        <h2 class="month">{{ month }}</h2>
+
 				<div class="spendingsPerMonth" :class="{ budgetExceeded: isBudgetExceededPerMonth(index) === true }">
 					Total {{ spendingsPerMonth(index) }}
 				</div>
+
 				<div class="spendings">
-					<div v-for="spending in spendingList[index]">{{ spending.amount }} {{ spending.type }}</div>
-				</div>
-				<div class="spendingsPerMonthPerType">
-					<div v-for="type in SPENDING_TYPES" v-if="spendingsPerMonthPerType(index, type) > 0" :class="{ budgetExceeded: isBudgetExceeded(index, type) }">
-						Total {{ type }}: {{ spendingsPerMonthPerType(index, type) }}
+					<div v-for="spending in spendingList[index]">
+						{{ spending.amount }} <span class="type">{{ spending.type }}</span>
 					</div>
 				</div>
+
+				<div class="spendingsPerMonthPerType">
+					<div v-for="type in SPENDING_TYPES" v-if="spendingsPerMonthPerType(index, type) > 0" :class="{ budgetExceeded: isBudgetExceeded(index, type) }">
+						Total <span class="type">{{ type }}</span> {{ spendingsPerMonthPerType(index, type) }}
+					</div>
+				</div>
+
       </div>
-			<div id="stats">
-				<div class="spendingsPerYear">
-					Per year: {{ spendingsPerYear }}
-				</div>
-				<div class="spendingsPerYear">
-					Monthly budget: {{ monthlyBudget }}
-				</div>
-				<div class="spendingsPerYear">
-					Per Month (mean): {{ spendingsPerMonthMean }}
+    </div>
+		<div id="stats">
+			<div class="spendingsPerYear">
+				Per year <span class="value">{{ spendingsPerYear }}</span>
+			</div>
+			<div class="spendingsPerYear">
+				Average per month <span class="value">{{ spendingsPerMonthAverage }}</span>
+			</div>
+			<div class="spendingsPerMonth">
+				<div>Wage tax {{ fixedSpendings.wageTax }}</div>
+				<div>Rent {{ fixedSpendings.rent }}</div>
+				<div>Charges {{ fixedSpendings.charges }}</div>
+				<div>House gaz {{ fixedSpendings.houseGaz }}</div>
+				<div>Electricity {{ fixedSpendings.electricity }}</div>
+				<div>Water {{ fixedSpendings.water }}</div>
+				<div>Internet {{ fixedSpendings.internet }}</div>
+				<div>Phone {{ fixedSpendings.phone }}</div>
+				<div>Housing tax {{ fixedSpendings.housingTax }}</div>
+				<div>Insurance {{ fixedSpendings.insurance }}</div>
+				<div> -> Monthly budget <span class="value">{{ monthlyBudget }}</span></div>
+			</div>
+			<div class="spendingsPerMonth">
+				<div v-for="(budget, key) in BUDGETS">
+					<span class="type">{{ key }}</span> {{ budget }} | Average {{ spendingsPerTypeAverage(key) }}
 				</div>
 			</div>
-    </div>
+		</div>
   </div>
 
 </template>
@@ -49,27 +71,35 @@
 			const houseGaz = 45;
 			const electricity = 38;
 			const water = 15;
-			const internet = 19.99;
-			const phone = 19.99;
+			const internet = 20;
+			const phone = 20;
 			const housingTax = 50;
-			const insurance = 63.55; // Car + House
+			const insurance = 64; // Car + House
 
 			const misHappenings = 250; // Because we never know what happens...
 
 			const monthlyBudget = wage - rent - charges - houseGaz - electricity - water - internet - phone - housingTax - insurance - misHappenings;
 
       return {
+				fixedSpendings: {
+					wageTax: wageTax,
+					rent: rent,
+					charges: charges,
+					houseGaz: houseGaz,
+					electricity: electricity,
+					water: water,
+					internet: internet,
+					phone: phone,
+					housingTax: housingTax,
+					insurance: insurance,
+				},
 				monthlyBudget: monthlyBudget,
         spendingList: dataFromJsonFile,
-				type: null,
-				amount: 0,
-				month: new Date().getMonth(),
-				errors: []
       }
     },
 		computed: {
-			spendingsPerMonthMean() {
-				return parseFloat((this.spendingsPerYear / 12, 5).toFixed(2));
+			spendingsPerMonthAverage() {
+				return Math.ceil(this.spendingsPerYear / 12);
 			},
 			spendingsPerYear() {
 				let amount = 0;
@@ -91,7 +121,7 @@
 				for (let i = 0; i < this.spendingList[month].length; i++) {
 					amount += this.spendingList[month][i].amount;
 				}
-				return parseFloat(amount.toFixed(2));
+				return amount;
 			},
 			spendingsPerMonthPerType(month, type) {
 				let spending = null;
@@ -106,6 +136,19 @@
 					}
 				}
 				return amount;
+			},
+			spendingsPerTypeAverage(type) {
+				let amount = 0;
+				let spending;
+				for (let month = 0; month < 12; month++) {
+					for (let i = 0; i < this.spendingList[month].length; i++) {
+						spending = this.spendingList[month][i];
+						if (spending.type === type) {
+							amount += this.spendingList[month][i].amount;
+						}
+					}
+				}
+				return Math.ceil(amount / 12);
 			},
 			isBudgetExceeded(month, type) {
 				const budget = this.BUDGETS[type];
