@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css?family=Anton|PT+Sans+Narrow');
+
+$primary: #EDA263;
+$danger: #FF0000;
+$white: #FFFFFF;
+$f_title: 'Anton', sans-serif;
+$f_text: 'PT Sans Narrow', sans-serif;
+
+.budgetExceeded {
+	color: $danger;
+}
+
+.spendingsPerMonth {
+	margin-top: 20px;
+}
+
+.spendingsPerMonthPerType {
+	margin-top: 20px;
+}
+
+body {
+    color: $white;
+		background: $primary;
+		font-family: $f_text;
+}
+
+#table {
+		width: 100%;
+    display: flex;
+		justify-content: space-between;
+
+    .month {
+        margin-left: 20px;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+    }
+}
+
+label {
+	margin-right: 20px;
+}

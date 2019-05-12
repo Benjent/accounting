@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css?family=Anton|PT+Sans+Narrow");
+.budgetExceeded {
+  color: #FF0000;
+}
+
+.spendingsPerMonth {
+  margin-top: 20px;
+}
+
+.spendingsPerMonthPerType {
+  margin-top: 20px;
+}
+
+body {
+  color: #FFFFFF;
+  background: #EDA263;
+  font-family: "PT Sans Narrow", sans-serif;
+}
+
+#table {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#table .month {
+  margin-left: 20px;
+}
+
+#table .month:first-of-type {
+  margin-left: 0;
+}
+
+label {
+  margin-right: 20px;
+}
